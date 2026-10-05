@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Traffic Lab - Token Bucket
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- ================================= -->
+    <!-- HEADER -->
+    <!-- ================================= -->
+
+    <header class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                Traffic Lab.
+            </h1>
+
+            <p>
+
+                Welcome to the Internet Traffic Police!
+                Generate tokens, send data packets,
+                and discover how networks control their
+                average traffic rate while allowing bursts.
+
+            </p>
+
+
+            <div class="tags">
+
+                <span>
+                    ⚡ Live simulation
+                </span>
+
+                <span>
+                    🪙 Token bucket
+                </span>
+
+                <span>
+                    📦 Packet traffic
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="bucket-icon">
+
+            🪣
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================================= -->
+    <!-- SIMULATOR TITLE -->
+    <!-- ================================= -->
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                01 / Live Token Bucket Simulator
+            </h2>
+
+            <p>
+                Change the settings and test the algorithm in real time.
+            </p>
+
+        </div>
+
+
+        <span class="interactive">
+            Interactive
+        </span>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- SIMULATOR -->
+    <!-- ================================= -->
+
+    <section class="simulator">
+
+
+        <!-- ================================= -->
+        <!-- LEFT SIDE -->
+        <!-- ================================= -->
+
+        <div class="panel">
+
+
+            <h2>
+                🪙 Token reservoir
+            </h2>
+
+
+            <p class="description">
+
+                Tokens are added at the configured rate.
+                The bucket can never exceed its capacity.
+
+            </p>
+
+
+
+            <!-- STATS -->
+
+            <div class="mini-stats">
+
+
+                <div class="mini-stat">
+
+                    <span>
+                        Available tokens
+                    </span>
+
+                    <strong id="availableTokens">
+                        5
+                    </strong>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <span>
+                        Bucket capacity
+                    </span>
+
+                    <strong id="bucketCapacity">
+                        5
+                    </strong>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <span>
+                        Sent packets
+                    </span>
+
+                    <strong id="sentPackets">
+                        0
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- BUCKET -->
+
+            <div class="bucket-title">
+
+                TOKEN BUCKET • LIVE VIEW
+
+            </div>
+
+
+            <div class="bucket-container">
+
+                <div
+                    id="bucket"
+                    class="bucket"
+                >
+
+                    <div
+                        id="tokenContainer"
+                        class="token-container"
+                    >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="capacity-bar">
+
+                <div
+                    id="capacityFill"
+                    class="capacity-fill"
+                >
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="capacityText"
+                class="capacity-text"
+            >
+
+                5 of 5 tokens stored
+
+            </div>
+
+
+
+            <!-- SETTINGS -->
+
+            <div class="settings">
+
+
+                <div class="setting">
+
+                    <div class="setting-header">
+
+                        <span>
+                            Bucket capacity
+                        </span>
+
+                        <strong id="capacityNumber">
+                            5
+                        </strong>
+
+                    </div>
+
+
+                    <input
+                        id="capacitySlider"
+                        type="range"
+                        min="1"
+                        max="15"
+                        value="5"
+                    >
+
+                </div>
+
+
+
+                <div class="setting">
+
+                    <div class="setting-header">
+
+                        <span>
+                            Token rate
+                        </span>
+
+                        <strong>
+                            <span id="rateNumber">
+                                2
+                            </span>/s
+                        </strong>
+
+                    </div>
+
+
+                    <input
+                        id="rateSlider"
+                        type="range"
+                        min="1"
+                        max="10"
+                        value="2"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- CONTROL BUTTONS -->
+
+            <div class="left-buttons">
+
+
+                <button
+                    id="generateBtn"
+                    class="primary-button"
+                >
+
+                    ＋ Generate tokens
+
+                </button>
+
+
+                <button
+                    id="autoRefillBtn"
+                    class="secondary-button"
+                >
+
+                    ▶ Auto refill: OFF
+
+                </button>
+
+
+            </div>
+
+
+            <div class="left-buttons">
+
+
+                <button
+                    id="resetBtn"
+                    class="secondary-button"
+                >
+
+                    ↻ Reset simulation
+
+                </button>
+
+
+                <button
+                    id="printBtn"
+                    class="secondary-button"
+                >
+
+                    🖨 Print notes
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- RIGHT SIDE -->
+        <!-- ================================= -->
+
+        <div class="panel right-panel">
+
+
+            <h2>
+                📦 Packet transmission gate
+            </h2>
+
+
+            <p class="description">
+
+                A packet needs one token per data unit.
+                Select its size and try to transmit it.
+
+            </p>
+
+
+
+            <!-- PACKET SIZE -->
+
+            <div class="packet-buttons">
+
+
+                <button
+                    class="packet-btn active"
+                    data-size="1"
+                >
+                    1 unit
+                </button>
+
+
+                <button
+                    class="packet-btn"
+                    data-size="2"
+                >
+                    2 units
+                </button>
+
+
+                <button
+                    class="packet-btn"
+                    data-size="3"
+                >
+                    3 units
+                </button>
+
+
+                <button
+                    class="packet-btn"
+                    data-size="4"
+                >
+                    4 units
+                </button>
+
+
+                <button
+                    class="packet-btn"
+                    data-size="5"
+                >
+                    5 units
+                </button>
+
+
+            </div>
+
+
+
+            <!-- SELECTED PACKET -->
+
+            <div class="selected-packet">
+
+
+                <div class="package-icon">
+                    📦
+                </div>
+
+
+                <div class="selected-label">
+                    Selected packet size
+                </div>
+
+
+                <div class="selected-size">
+
+                    <span id="selectedPacket">
+                        1
+                    </span>
+
+                    <small>
+                        token(s)
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TRANSMIT -->
+
+            <div class="transmit-buttons">
+
+
+                <button
+                    id="transmitBtn"
+                    class="transmit-btn"
+                >
+
+                    Transmit packet →
+
+                </button>
+
+
+                <button
+                    id="burstBtn"
+                    class="burst-btn"
+                >
+
+                    ⚡ Send burst (3 packets)
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div
+                id="status"
+                class="status ready"
+            >
+
+                <span class="status-dot"></span>
+
+
+                <div>
+
+                    <strong>
+                        Network ready
+                    </strong>
+
+                    <p>
+                        Generate tokens or transmit a packet
+                        to begin the simulation.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOG -->
+
+            <div class="log-header">
+
+                <div>
+
+                    <h2>
+                        📝 Transmission log
+                    </h2>
+
+                    <p>
+                        Every event is recorded here.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="clearLogBtn"
+                    class="clear-btn"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div
+                id="log"
+                class="log"
+            >
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
